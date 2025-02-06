@@ -9,6 +9,6 @@
 # Zeppelin ignored files
 /ZeppelinRemoteNotebooks/
 
-.xml
+*.xml
 *.txt
 *.db
