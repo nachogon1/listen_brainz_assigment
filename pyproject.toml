@@ -1,0 +1,22 @@
+[project]
+name = "listen-brainz-assigment"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "nachogon1",email = "nachogon92@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb (>=1.2.0,<2.0.0)"
+]
+
+[tool.poetry.scripts]
+create-db = "listen_brainz_assigment.database.create_db:main"
+ingest-db = "listen_brainz_assigment.etl.ingest_data:main"
+
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
