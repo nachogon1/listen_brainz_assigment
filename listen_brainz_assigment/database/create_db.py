@@ -15,7 +15,7 @@ def main():
     CREATE TABLE IF NOT EXISTS releases (
         release_msid UUID PRIMARY KEY,
         release_mbid UUID,
-        release_name TEXT NOT NULL,
+        release_name TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     ''')
@@ -25,7 +25,7 @@ def main():
         recording_msid UUID PRIMARY KEY,
         track_name TEXT NOT NULL,
         artist_msid UUID NOT NULL REFERENCES artists(artist_msid),
-        release_msid UUID NOT NULL REFERENCES releases(release_msid),
+        release_msid UUID REFERENCES releases(release_msid),
         recording_mbid UUID,
         release_group_mbid UUID,
         isrc TEXT,
@@ -63,17 +63,13 @@ def main():
 
     con.sql('''
     CREATE TABLE IF NOT EXISTS listens (
-        listen_id TEXT PRIMARY KEY,
         user_name TEXT NOT NULL,
         recording_msid UUID NOT NULL REFERENCES tracks(recording_msid),
         listened_at TIMESTAMP NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE (listened_at, recording_msid, user_name)
+        PRIMARY KEY (listened_at, recording_msid, user_name)
     );
     ''')
 
 if __name__ == "__main__":
     main()
-
-# query the table
-# con.table('test').show()
