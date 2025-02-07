@@ -41,14 +41,15 @@ poetry run get-results
 The results are added in the `./listen_brainz_assigment/results` directory.
 
 
-For the assigment specific case we placed the `dataset.txt` in `./listen_brainz_assigment/database directory`. The dataset was created in the root directory `.` .
-We have not added this to the repository because of the size of the file. But it the poetry tasks should run following the instructions.
+For the assigment specific case we placed the `dataset.txt` in `./listen_brainz_assigment/database` directory. The database file was created in the root directory `.` .
+We have not added those to the repository because of the size of the file. But the poetry tasks can be run following the instructions.
 
 
 ## Results
-Task 1. It took around 38 minutes to ingest all the data from the dataset.txt.  Data was read and write in batches of 100k. 
+Task 1. It took around 38 minutes to ingest all the data from the `dataset.txt`.  Data was read and write in batches of 100k. 
 We tested several methods, insert into memory and export the data to the database. But it did not add great improvements.
-Batches was the fastest way to ingest the data.
+Batches were the fastest way to ingest the data.
+
 Concurrency was discarded. Duckdb is not designed to do multi-process writes. We got a lock error and did not continue with this analysis. 
 
 Database Schema
