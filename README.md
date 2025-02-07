@@ -38,6 +38,8 @@ poetry run ingest-db <Absolute_path_for_your_data>
 ```shell
 poetry run get-results
 ```
+The results are added in the `./listen_brainz_assigment/results` directory.
+
 
 For the assigment specific case we placed the `dataset.txt` in `./listen_brainz_assigment/database directory`. The dataset was created in the root directory `.` .
 We have not added this to the repository because of the size of the file. But it the poetry tasks should run following the instructions.
