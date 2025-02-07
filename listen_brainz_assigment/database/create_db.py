@@ -1,7 +1,7 @@
 import duckdb
 
-def create_tables(con):
 
+def create_tables(con):
     con.sql('''
     CREATE TABLE IF NOT EXISTS artists (
         artist_msid UUID PRIMARY KEY,
@@ -70,9 +70,11 @@ def create_tables(con):
     );
     ''')
 
+
 def main():
     con = duckdb.connect("listen_brainz.db")
     create_tables(con)
+
 
 if __name__ == "__main__":
     main()
