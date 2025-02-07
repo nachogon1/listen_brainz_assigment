@@ -34,6 +34,62 @@ We tested several methods, insert into memory and export the data to the databas
 Batches was the fastest way to ingest the data. We ingested the data in batches of 100k rows.
 Concurrency was discarded. Duckdb is not designed to multi process writes. We got a lock error and did not continue with this analysis. 
 
+Database Schema
+```
+                           +----------------------+
+                           |      artists         |
+                           |----------------------|
+                           | artist_msid  (PK)    |
+                           | artist_name          |
+                           | created_at           |
+                           +----------------------+
+                                    │
+                                    │ (FK in tracks)
+                                    │
+                           +----------------------+
+                           |      tracks          |
+                           |----------------------|
+                           | recording_msid (PK)  |
+                           | track_name           |
+                           | artist_msid  (FK) ────────────┐
+                           | release_msid (FK) ──┐         │
+                           | recording_mbid       │        │
+                           | release_group_mbid   │        │
+                           | isrc                 │        │
+                           | spotify_id           │        │
+                           | tracknumber          │        │
+                           | track_mbid           │        │
+                           | created_at           │        │
+                           +----------------------+        │
+                                    │                      │
+                ┌───────────────────┼──────────────────────┼─────────────────────┐
+                │                   │                      │                     │
++----------------------+   +----------------------+  +----------------------+  +----------------------+
+|    track_tags        |   |     listens          |  |     track_works      |  |      releases        |
+|----------------------|   |----------------------|  |----------------------|  |----------------------|
+| recording_msid (FK)  |   | user_name            |  | recording_msid (FK)  |  | release_msid  (PK)    |
+| tag           (PK)   |   | recording_msid (FK)  |  | work_mbid     (FK)   |  | release_mbid         |
+| created_at           |   | listened_at          |  | created_at           |  | release_name         |
++----------------------+   | created_at           |  +----------------------+  | created_at           |
+                           | (PK: listened_at,    |             |              +----------------------+
+                           |  recording_msid,     |             |
+                           |  user_name)          |             |
+                           +----------------------+             |
+                                                                |
+                                                       +----------------------+
+                                                       |       works          |
+                                                       |----------------------|
+                                                       | work_mbid   (PK)     |
+                                                       | created_at           |
+                                                       +----------------------+
+
+          Note: Both **listens** and **track_works** reference the **tracks** table
+                via the recording_msid field. This creates an indirect link between
+                track_works and listens.
+
+```
+
+
 Task 2. a)
 ```
 ┌────────────────┬──────────────┐
