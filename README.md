@@ -35,6 +35,7 @@ Batches was the fastest way to ingest the data. We ingested the data in batches 
 Concurrency was discarded. Duckdb is not designed to multi process writes. We got a lock error and did not continue with this analysis. 
 
 Task 2. a)
+```
 ┌────────────────┬──────────────┐
 │   user_name    │ listen_count │
 │    varchar     │    int64     │
@@ -90,8 +91,11 @@ Task 2. a)
 ├─────────────────┴──────────────────────────────────────┴─────────────────────────────────────────────────┴─────────────────────┤
 │ 202 rows (20 shown)                                                                                                  4 columns │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
+```
 Task 2. b)
+
+```
+
 ┌─────────────────┬───────────────────┬────────────┐
 │      user       │ number_of_listens │    date    │
 │     varchar     │       int64       │    date    │
@@ -122,8 +126,10 @@ Task 2. b)
 ├─────────────────┴───────────────────┴────────────┤
 │ 577 rows (20 shown)                    3 columns │
 └──────────────────────────────────────────────────┘
+```
 
 Task 2. c)
+```
 ┌─────────────────────┬─────────────────────┬─────────────────────────┐
 │        date         │ number_active_users │ percentage_active_users │
 │      timestamp      │        int64        │         double          │
@@ -154,6 +160,7 @@ Task 2. c)
 ├─────────────────────┴─────────────────────┴─────────────────────────┤
 │ 105 rows (20 shown)                                       3 columns │
 └─────────────────────────────────────────────────────────────────────┘
+```
 
 ## Challenges
 
