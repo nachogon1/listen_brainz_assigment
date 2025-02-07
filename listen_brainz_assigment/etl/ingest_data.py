@@ -114,7 +114,6 @@ def process_batch(batch, cursor, db_connection):
     return artists, releases, tracks, track_tags, listens
 
 
-# TODO imrpove this
 def etl_job(input_file_path, db_connection, batch_size=100000):
     cursor = db_connection.cursor()
 

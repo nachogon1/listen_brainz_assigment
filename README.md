@@ -3,16 +3,23 @@ https://c.smartrecruiters.com/sr-company-attachments-prod-aws-dc5/606dc56fe6557d
 
 ## Requirements
 Python-12
-
 MacOs (Was not tested in other OS)
+"poetry-core>=2.0.0,<3.0.0"
 
 ## Installation
+Install poetry
+```shell
+pip install poetry
+```
+
 Download the project and run the following command in the root directory of the project
 ```shell
 poetry install
 ```
 
 ## Usage
+From the root directory of the project run the following commands
+
 1. Create the dataset
 ```shell
 poetry run create-db
@@ -28,12 +35,15 @@ poetry run ingest-db <Absolute_path_for_your_data>
 poetry run get-results
 ```
 
+For the assigment specific case we placed the `dataset.txt` in `./listen_brainz_assigment/database directory`. The dataset was created in the root directory `.` .
+We have not added this to the repository because of the size of the file. But it the poetry tasks should run following the instructions.
+
 
 ## Results
 Task 1. It took around 38 minutes to ingest all the data from the dataset.txt.  Data was read and write in batches of 100k. 
 We tested several methods, insert into memory and export the data to the database. But it did not add great improvements.
-Batches was the fastest way to ingest the data. We ingested the data in batches of 100k rows.
-Concurrency was discarded. Duckdb is not designed to multi process writes. We got a lock error and did not continue with this analysis. 
+Batches was the fastest way to ingest the data.
+Concurrency was discarded. Duckdb is not designed to do multi-process writes. We got a lock error and did not continue with this analysis. 
 
 Database Schema
 ```
@@ -90,8 +100,12 @@ Database Schema
 
 ```
 
+Task 2.
+
+Full results can be found in `listen_brainz_assigment/results` directory
 
 Task 2. a)
+
 ```
 ┌────────────────┬──────────────┐
 │   user_name    │ listen_count │
@@ -220,11 +234,14 @@ Task 2. c)
 ```
 
 ## Challenges
+Ingesting the data and modelling the database were the most challenging tasks. We tackled the problem by reading the dataset and duckdb documentation.
 
+Still the data ingestion could be subject to improvements.
 
 
 
 ## Improvements
-We could have faster ingestion times with multi batch multi process ingestion in a normal database.
+We could have faster ingestion times with multi batch, multi-process ingestion in a normal database.
 The batch size could be further optimized.
 Better validation of the data could be done.
+Better handling of the data in case of duplicates.
