@@ -14,6 +14,8 @@ UUID_REGEX = re.compile(
     re.IGNORECASE
 )
 
+total_records = 0
+
 
 def is_valid_uuid(value):
     """Return True if the value matches the UUID format."""
@@ -57,6 +59,7 @@ def validate_mbids(recording_mbid, release_mbid, track_mbid):
 
 
 def process_batch(batch, cursor, db_connection):
+    global total_records
     # Initialize accumulators for this batch.
     artists = []
     releases = []
@@ -111,14 +114,14 @@ def process_batch(batch, cursor, db_connection):
     return artists, releases, tracks, track_tags, listens
 
 
+# TODO imrpove this
 def etl_job(input_file_path, db_connection, batch_size=100000):
     cursor = db_connection.cursor()
-    total_records = 0
 
     with open(input_file_path, 'r') as file:
         # Process the file in batches. The iter(lambda: ...) returns [] when no more lines.
         for batch in iter(lambda: list(itertools.islice(file, batch_size)), []):
-            artists, releases, tracks, listens = process_batch(batch, cursor, db_connection)
+            artists, releases, tracks, track_tags, listens = process_batch(batch, cursor, db_connection)
 
             # Batch insert for the current batch.
             if artists:
