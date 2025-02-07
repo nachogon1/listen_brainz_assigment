@@ -1,7 +1,6 @@
 import duckdb
 
-def main():
-    con = duckdb.connect("listen_brainz.db")
+def create_tables(con):
 
     con.sql('''
     CREATE TABLE IF NOT EXISTS artists (
@@ -70,6 +69,10 @@ def main():
         PRIMARY KEY (listened_at, recording_msid, user_name)
     );
     ''')
+
+def main():
+    con = duckdb.connect("listen_brainz.db")
+    create_tables(con)
 
 if __name__ == "__main__":
     main()

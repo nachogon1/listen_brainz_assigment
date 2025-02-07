@@ -14,7 +14,7 @@ dependencies = [
 [tool.poetry.scripts]
 create-db = "listen_brainz_assigment.database.create_db:main"
 ingest-db = "listen_brainz_assigment.etl.ingest_data:main"
-
+get-results = "listen_brainz_assigment.analytics.results:main"
 
 
 [build-system]
