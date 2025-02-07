@@ -52,7 +52,7 @@ Database Schema
                            | recording_msid (PK)  |
                            | track_name           |
                            | artist_msid  (FK) ────────────┐
-                           | release_msid (FK) ──┐         │
+                           | release_msid (FK) ───┐        │
                            | recording_mbid       │        │
                            | release_group_mbid   │        │
                            | isrc                 │        │
@@ -67,7 +67,7 @@ Database Schema
 +----------------------+   +----------------------+  +----------------------+  +----------------------+
 |    track_tags        |   |     listens          |  |     track_works      |  |      releases        |
 |----------------------|   |----------------------|  |----------------------|  |----------------------|
-| recording_msid (FK)  |   | user_name            |  | recording_msid (FK)  |  | release_msid  (PK)    |
+| recording_msid (FK)  |   | user_name            |  | recording_msid (FK)  |  | release_msid  (PK)   |
 | tag           (PK)   |   | recording_msid (FK)  |  | work_mbid     (FK)   |  | release_mbid         |
 | created_at           |   | listened_at          |  | created_at           |  | release_name         |
 +----------------------+   | created_at           |  +----------------------+  | created_at           |
