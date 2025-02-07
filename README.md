@@ -3,7 +3,9 @@ https://c.smartrecruiters.com/sr-company-attachments-prod-aws-dc5/606dc56fe6557d
 
 ## Requirements
 Python-12
+
 MacOs (Was not tested in other OS)
+
 "poetry-core>=2.0.0,<3.0.0"
 
 ## Installation
