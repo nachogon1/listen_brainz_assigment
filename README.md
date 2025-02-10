@@ -34,6 +34,12 @@ poetry run create-db
 poetry run ingest-db <Absolute_path_for_your_data>
 ```
 
+or
+
+```shell
+poetry run ingest-db-optimized <Absolute_path_for_your_data>
+```
+
 3. Perform the analytic questions over the dataset
 ```shell
 poetry run get-results
