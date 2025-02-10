@@ -1,17 +1,10 @@
-import argparse
 import json
 import time
 import duckdb
-import re
 from datetime import datetime
 
 from listen_brainz_assigment.database.create_db import create_tables
-
-# Precompiled regex for UUID validation.
-UUID_REGEX = re.compile(
-    r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-    re.IGNORECASE
-)
+from listen_brainz_assigment.etl.commons import get_dataset_path, UUID_REGEX
 
 total_records = 0
 
@@ -97,13 +90,13 @@ def process_batch(batch, cursor):
     return artists, releases, tracks, listens
 
 
-def load_and_process_data(db_connection):
+def etl_job(dataset_path, db_connection, batch_size=100000):
     cursor = db_connection.cursor()
 
     # Create the raw_json table by reading the dataset
-    cursor.execute("""
+    cursor.execute(f"""
         CREATE TABLE if not exists raw_json AS
-        SELECT * FROM read_json_auto('./listen_brainz_assigment/database/dataset.txt', sample_size=-1, union_by_name=true, ignore_errors=true);
+        SELECT * FROM read_json_auto('{dataset_path}', sample_size=-1, union_by_name=true, ignore_errors=true);
     """)
 
     # Insert artists, skipping duplicates
@@ -133,13 +126,8 @@ def load_and_process_data(db_connection):
         WHERE track_metadata.additional_info.release_msid IS NOT NULL
         ON CONFLICT (release_msid) DO NOTHING;  -- Skip duplicate
     """)
-    # TODO say why process is idenpotent
-    # TODO Say how to add validations in sql
-    # Insert tracks, skipping duplicates
-    # Define the batch size
-    batch_size = 10000  # You can adjust this as needed
 
-    # Get the total number of rows
+    # Get the total number of rows to loop in batches
     cursor.execute("SELECT COUNT(*) FROM raw_json WHERE track_metadata.additional_info.recording_msid IS NOT NULL")
     total_rows = cursor.fetchone()[0]
 
@@ -217,16 +205,16 @@ def load_and_process_data(db_connection):
     # Commit the changes
     db_connection.commit()
 
-    # select count(recording_msid) from tracks;
 
 def main():
+    dataset_path = get_dataset_path()
     db_connection = duckdb.connect("listen_brainz.db")
     # Set memory-related configurations
     db_connection.execute("SET max_memory='8GB'")
     db_connection.execute("SET memory_limit='8GB'")
     t0 = time.time()
     create_tables(db_connection)
-    load_and_process_data(db_connection)
+    etl_job(dataset_path, db_connection, batch_size=10000)
     t1 = time.time()
     print(f"Time taken: {t1 - t0:.2f} seconds")
 

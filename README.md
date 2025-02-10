@@ -46,11 +46,11 @@ We have not added those to the repository because of the size of the file. But t
 
 
 ## Results
-Task 1. It took around 38 minutes to ingest all the data from the `dataset.txt`.  Data was read and write in batches of 100k. 
+Task 1. First Approach took around 38 minutes to ingest all the data from the `dataset.txt`.  Data was read and write in batches of 100k using python duckdb driver. 
+Second and optimized approach took around 25 seconds to ingest the data. The data was read by duckdb and all the heavy lifting was done by the duckdb database.
+Process are idenpotent. The process can be restarted at any time and the data already ingested data will be ignored and the new data be appended. 
 We tested several methods, insert into memory and export the data to the database. But it did not add great improvements.
-Batches were the fastest way to ingest the data.
-
-Concurrency was discarded. Duckdb is not designed to do multi-process writes. We got a lock error and did not continue with this analysis. 
+Concurrency was discarded. Duckdb is not designed to do multi-process writes on the same file. We got a lock error and did not continue with this analysis. 
 
 Database Schema
 ```
@@ -252,3 +252,6 @@ We could have faster ingestion times with multi batch, multi-process ingestion i
 The batch size could be further optimized.
 Better validation of the data could be done.
 Better handling of the data in case of duplicates.
+Results between the first and the optimized approach differ slightly due to different validation rules. Due to time constrains the optimized approach had fewer validations and beautification's on the code.
+The code could have been done more scalable supporting batches for every table to allow us to ingest any database size.
+In the optimized code tags were not ingested since the main purpose was to improve the ingestion benchmark. This could be added in the future.

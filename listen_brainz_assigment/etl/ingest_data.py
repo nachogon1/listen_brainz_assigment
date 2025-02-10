@@ -1,18 +1,12 @@
-import argparse
 import json
 import time
 import duckdb
-import re
 import itertools
 from datetime import datetime
 
 from listen_brainz_assigment.database.create_db import create_tables
-
-# Precompiled regex for UUID validation.
-UUID_REGEX = re.compile(
-    r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-    re.IGNORECASE
-)
+from listen_brainz_assigment.etl.commons import get_dataset_path
+from listen_brainz_assigment.etl.ingest_data_optimized import UUID_REGEX
 
 total_records = 0
 
@@ -162,18 +156,7 @@ def etl_job(input_file_path, db_connection, batch_size=100000):
 
 
 def main():
-    # Set up command-line argument parsing.
-    parser = argparse.ArgumentParser(description="Ingest data into DuckDB.")
-    parser.add_argument(
-        "file_path",
-        nargs="?",
-        default="./listen_brainz_assigment/database/dataset.txt",
-        help="Path to the dataset file (defaults to './listen_brainz_assigment/database/dataset.txt')"
-    )
-    args = parser.parse_args()
-    dataset_path = args.file_path
-
-    print(f"Using dataset path: {dataset_path}")
+    dataset_path = get_dataset_path()
     db_connection = duckdb.connect("listen_brainz.db")
     t0 = time.time()
     create_tables(db_connection)
